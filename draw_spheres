@@ -1,0 +1,66 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using System.Runtime.InteropServices;
+
+public class SampleCode : MonoBehaviour{
+    [DllImport("Samplec.dll", CharSet = CharSet.Unicode)]
+    //Get C++ function so we can simply call it in C#
+    static extern int randNums();
+
+    Text text;
+    GameObject sphereInd;
+    GameObject sphereThmb;
+    int vals;
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        //Create index finger sphere 
+        sphereInd = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        setSphereCol(sphereInd, Color.red);
+
+        //Create thumb sphere 
+        sphereThmb = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        setSphereCol(sphereThmb, Color.blue);
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        vals = randNums();
+        print(vals);
+       // sphereInd.transform.position = new Vector3(vals, vals, vals);
+       // sphereThmb.transform.position = new Vector3(vals, vals, vals);
+
+    }
+
+    void setSphereCol(GameObject sphere, Color col)
+    {
+        //Get the renderer
+        var sphereRenderer = sphere.GetComponent<Renderer>();
+        //Set the color of the sphere
+        sphereRenderer.material.SetColor("_Color", col);
+    }
+
+
+   // string[] parseCords()
+   // {
+   //     int allCords = randNums();
+        // this splits the string using comma as a parameter.
+        // every index on the array will now have a code in it.
+        // note that this method requires you to use a single ' instead of "
+       //string[] cords = allCords.Split(',');
+       // return cords;
+        // prints on the screen all the codes
+      //  foreach (string current in cords)
+      //  {
+      //      Debug.Log(current);
+        //}
+
+   // }
+
+}
