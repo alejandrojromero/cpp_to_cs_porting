@@ -1,0 +1,94 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using System.Runtime.InteropServices;
+using System.IO;
+using System.Diagnostics;
+using System.Threading;
+using System.ComponentModel;
+
+
+public class drawSpheres : MonoBehaviour
+{
+    GameObject sphereInd;
+    GameObject sphereThmb;
+    float vals;
+   // bool active = false;
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        //Create index finger sphere 
+        sphereInd = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        setSphereCol(sphereInd, Color.red);
+
+        //Create thumb sphere 
+        sphereThmb = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        setSphereCol(sphereThmb, Color.blue);
+        
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        vals = Random.Range(0, 10.0f);
+      //  print(vals);
+        sphereInd.transform.position = new Vector3(vals, vals, vals);
+        sphereThmb.transform.position = new Vector3(vals, vals, vals);
+        
+        
+        if (Input.GetKey("up"))
+        {
+            runCommand();
+        }
+
+    }
+
+    void setSphereCol(GameObject sphere, Color col)
+    {
+        //Get the renderer
+        var sphereRenderer = sphere.GetComponent<Renderer>();
+        //Set the color of the sphere
+        sphereRenderer.material.SetColor("_Color", col);
+    }
+    
+    static void runCommand()
+{
+    //* Create your Process
+    Process process = new Process();
+    process.StartInfo.FileName = "/media/lab3dipa/hdd1/Documents/cncsvision/build/room017A_optotrak_VR";
+    process.StartInfo.Arguments = "/c DIR";
+    process.StartInfo.UseShellExecute = false;
+    process.StartInfo.RedirectStandardOutput = true;
+    process.StartInfo.RedirectStandardError = true;
+    //* Set ONLY ONE handler here.
+    process.ErrorDataReceived += new DataReceivedEventHandler(OutputHandler);
+    //* Start process
+    process.Start();
+    //* Read one element asynchronously
+    process.BeginErrorReadLine();
+
+
+        //* Read the other one synchronously
+    string output = process.StandardOutput.ReadToEnd();
+
+    if(output == "ready"){
+        process.StandardInput.WriteLine("1"); 
+        process.StandardInput.WriteLine(" "); 
+       // print("it works");
+    }
+    print(output);
+    process.WaitForExit();
+}
+
+static void OutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
+{
+    //* Do your stuff with the output (write to console/log/StringBuilder)
+    print(outLine.Data);
+}
+
+
+}
