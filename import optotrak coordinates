@@ -1,0 +1,165 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using System.Runtime.InteropServices;
+using System.IO;
+using System.Diagnostics;
+using System.Threading;
+using System.ComponentModel;
+
+
+public class drawSpheres : MonoBehaviour
+{
+    GameObject sphereInd;
+    GameObject sphereThmb;
+    float vals;
+    public static  Process process;
+    public GameObject txt;
+    
+    
+   // bool active = false;
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        //Create index finger sphere 
+        sphereInd = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        setSphereCol(sphereInd, Color.red);
+
+        //Create thumb sphere 
+        sphereThmb = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        setSphereCol(sphereThmb, Color.blue);
+        
+        runCommand();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        vals = Random.Range(0, 10.0f);
+      //  print(vals);
+        sphereInd.transform.position = new Vector3(vals, vals, vals);
+        sphereThmb.transform.position = new Vector3(vals, vals, vals);
+        
+        
+        if (Input.GetKey("up"))
+        {
+            print("5");
+            StreamReader reader;
+            string output;
+            StreamWriter sr= process.StandardInput;
+            print("THIS SHOULD WORK");
+            sr.WriteLine("0");
+            
+            sr.WriteLine(" ");
+            reader = process.StandardOutput;
+            output = reader.ReadLine();
+            //print(output);
+            process.WaitForExit();
+            sr.Close();
+
+        }
+        
+        if (Input.GetKey("5"))
+        {
+            print("5");
+            StreamReader reader;
+            string output;
+            StreamWriter sr= process.StandardInput;
+            print("THIS SHOULD WORK");
+            sr.WriteLine("5");
+            
+            sr.WriteLine(" ");
+            reader = process.StandardOutput;
+            output = reader.ReadLine();
+            print(output);
+            sr.Close();
+
+        }
+        
+        if (Input.GetKey("6"))
+        {
+            print("5");
+            StreamReader reader;
+            string output;
+            StreamWriter sr= process.StandardInput;
+            print("THIS SHOULD WORK");
+            sr.WriteLine("17");
+            
+            sr.WriteLine(" ");
+            reader = process.StandardOutput;
+            output = reader.ReadLine();
+            print(output);
+            sr.Close();
+            txt.GetComponent<UnityEngine.UI.Text>().text = output;
+        }
+        
+        
+
+    }
+
+    void setSphereCol(GameObject sphere, Color col)
+    {
+        //Get the renderer
+        var sphereRenderer = sphere.GetComponent<Renderer>();
+        //Set the color of the sphere
+        sphereRenderer.material.SetColor("_Color", col);
+    }
+    
+    static void runCommand()
+{
+    //* Create your Process
+    print("1");
+    process = new Process();
+    process.StartInfo.FileName = "/media/lab3dipa/hdd1/Documents/cncsvision/build/room017A_optotrak_VR";
+    process.StartInfo.Arguments = "/c DIR";
+    process.StartInfo.UseShellExecute = false;
+    process.StartInfo.RedirectStandardOutput = true;
+    process.StartInfo.RedirectStandardError = true;
+    process.StartInfo.RedirectStandardInput = true;
+    //* Set ONLY ONE handler here.
+    process.ErrorDataReceived += new DataReceivedEventHandler(OutputHandler);
+    //* Start process
+    print("2");
+    process.Start();
+    print("3");
+    //process.PriorityClass = System.Diagnostics.ProcessPriorityClass.Normal;
+    //* Wait for program to receive to input
+    //process.WaitForInputIdle();
+    print("4");
+    //System.Threading.Thread.Sleep(10000);
+    //* Read one element asynchronously
+    process.BeginErrorReadLine();
+
+
+        //* Read the other one synchronously
+    
+    //string output = process.StandardOutput.ReadToEnd();
+    /*for (int i = 1; i < 5; i++){
+        if(output == "ready"){
+            process.StandardInput.WriteLine(i.ToString()); 
+            process.StandardInput.WriteLine(" "); 
+            print(output);
+        // print("it works");
+        }
+        
+    }*/
+    
+
+    //process.StandardInput.WriteLine("0"); 
+    //process.StandardInput.WriteLine(" "); 
+    //System.Threading.Thread.Sleep(1000);
+    //process.Kill();
+    //process.WaitForExit();
+}
+
+static void OutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
+{
+    //* Do your stuff with the output (write to console/log/StringBuilder)
+    print(outLine.Data);
+}
+
+
+}
