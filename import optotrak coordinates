@@ -16,6 +16,8 @@ public class drawSpheres : MonoBehaviour
     float vals;
     public static  Process process;
     public GameObject txt;
+    public GameObject player;
+
     
     
    // bool active = false;
@@ -25,12 +27,14 @@ public class drawSpheres : MonoBehaviour
     void Start()
     {
         //Create index finger sphere 
-        sphereInd = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        setSphereCol(sphereInd, Color.red);
+       // sphereInd = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+       // setSphereCol(sphereInd, Color.red);
+        
+       // sphereInd.transform.position = new Vector3(0f, 0f, 0f);
 
         //Create thumb sphere 
-        sphereThmb = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        setSphereCol(sphereThmb, Color.blue);
+        //sphereThmb = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+       // setSphereCol(sphereThmb, Color.blue);
         
         runCommand();
     }
@@ -38,11 +42,15 @@ public class drawSpheres : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        vals = Random.Range(0, 10.0f);
+        //vals = Random.Range(0, 10.0f);
       //  print(vals);
-        sphereInd.transform.position = new Vector3(vals, vals, vals);
-        sphereThmb.transform.position = new Vector3(vals, vals, vals);
+        //sphereInd.transform.position = new Vector3(vals, vals, vals);
+        //sphereThmb.transform.position = new Vector3(vals, vals, vals);
         
+        
+        float playerX;
+        float playerY;
+        float playerZ;
         
         if (Input.GetKey("up"))
         {
@@ -58,7 +66,7 @@ public class drawSpheres : MonoBehaviour
             output = reader.ReadLine();
             //print(output);
             process.WaitForExit();
-            sr.Close();
+            //sr.Close();
 
         }
         
@@ -75,25 +83,30 @@ public class drawSpheres : MonoBehaviour
             reader = process.StandardOutput;
             output = reader.ReadLine();
             print(output);
-            sr.Close();
+            //sr.Close();
 
         }
         
         if (Input.GetKey("6"))
         {
-            print("5");
+            //print("5");
             StreamReader reader;
             string output;
             StreamWriter sr= process.StandardInput;
-            print("THIS SHOULD WORK");
+            //print("THIS SHOULD WORK");
             sr.WriteLine("17");
             
             sr.WriteLine(" ");
             reader = process.StandardOutput;
             output = reader.ReadLine();
             print(output);
-            sr.Close();
-            txt.GetComponent<UnityEngine.UI.Text>().text = output;
+            //sr.Close();
+            string[] coords  = output.Split(' ');
+            txt.GetComponent<UnityEngine.UI.Text>().text = coords[0];
+            sphereInd.transform.position = new Vector3(player.transform.position.x + float.Parse(coords[0]), 
+                player.transform.position.y + float.Parse(coords[1]), 
+                player.transform.position.z + float.Parse(coords[2]));
+            
         }
         
         
